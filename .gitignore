@@ -1,0 +1,7 @@
+*.conf
+*.crt
+*.csr
+*.key
+*.pem
+*.srl
+
