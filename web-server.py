@@ -105,9 +105,9 @@ httpd = HTTPServer( ('0.0.0.0', port), RequestHandler )
 
 if ssl_enable:
 
-    from ssl import SSLContext
+    from ssl import SSLContext, PROTOCOL_TLS_SERVER
 
-    ctx=SSLContext()
+    ctx=SSLContext( PROTOCOL_TLS_SERVER )
     ctx.check_hostname = False
     ctx.load_cert_chain( keyfile= ssl_keyfile, certfile= ssl_certfile )
     httpd.socket = ctx.wrap_socket( httpd.socket, server_side= True )
