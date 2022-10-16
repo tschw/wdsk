@@ -57,13 +57,30 @@ if helpmsg_to:
     exit( helpmsg_to is stderr and 1 or 0 )
 
 
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+from http.server import HTTPServer, CGIHTTPRequestHandler
 
-class RequestHandler( SimpleHTTPRequestHandler ):
+class RequestHandler( CGIHTTPRequestHandler ):
+
+    have_fork = False
+
+    # Forking apparently doesn't play well with SSL (Python 3.10.6). That code
+    # path also performs script execution as 'nobody:nogroup' so ever using it
+    # would be inconsistent.
+    #
+    # Switching it off causes an implementation based on `subprocess`, running
+    # CGI scripts as the same user as the server script.
+    #
+    # We specifically target trusted / development environments only, so let's
+    # not worry about features we'd only need in production.
+
     """
         from https://gist.github.com/mkows/cd2122f427ea722bf41aa169ef762001
     """
     def send_head(self):
+
+        if self.is_cgi():
+            return self.run_cgi()
+
         path = self.translate_path(self.path)
         f = None
         if os.path.isdir(path):
