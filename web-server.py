@@ -97,7 +97,7 @@ class RequestHandler( SimpleHTTPRequestHandler ):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Cross-Origin-Embedder-Policy", "require-corp");
         self.send_header('Cross-Origin-Opener-Policy', "same-origin");
-    
+
         self.end_headers()
         return f
 
