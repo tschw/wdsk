@@ -21,7 +21,9 @@ else:
 
         temp_file_name = 'upload%x.part' % getpid()
         temp_file_path = path.join( output_directory, temp_file_name )
-        copyfileobj( fileitem.file, open( temp_file_path, 'wb' ) )
+        temp_file = open( temp_file_path, 'wb' )
+        copyfileobj( fileitem.file, temp_file )
+        temp_file.close()
 
         file_name = path.basename( fileitem.filename )
         rename( temp_file_path, path.join( output_directory, file_name ) )
